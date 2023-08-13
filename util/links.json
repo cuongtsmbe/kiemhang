@@ -1,0 +1,14 @@
+{
+    "CLIENT": {
+
+        "AUTHENTICATION_LOGIN"  : "/authentication/login/local",
+
+        "AUTHENTICATION_CREATE_ACCESSTOKEN" : "/authentication/accesstoken",
+
+        "AUTHENTICATION_REGISTER" : "/authentication/register",
+
+        "PRODUCT_IMPORT" : "/product/import/:idImport",
+
+        "PRODUCT_EXPORT" : "/product/export/:idExport"
+    }
+}
