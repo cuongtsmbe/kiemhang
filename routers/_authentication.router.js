@@ -5,6 +5,8 @@ const str2ab = require('string-to-arraybuffer');
 const tokenUtil = require("../util/token");
 const { v4: uuidv4 } = require("uuid");
 const Utilvalidate = require("../util/validation");
+const email = require("../util/email");
+
 require('dotenv').config();
 
 module.exports = {
@@ -12,6 +14,9 @@ module.exports = {
         app.post(    LINK.CLIENT.AUTHENTICATION_LOGIN                           ,this.loginLocal);
         app.post(    LINK.CLIENT.AUTHENTICATION_CREATE_ACCESSTOKEN              ,this.createAccessToken);
         app.post(    LINK.CLIENT.AUTHENTICATION_REGISTER                        ,this.register);
+        app.get(     LINK.CLIENT.AUTHENTICATION_FORGET_PW                       ,this.getOtp);
+        app.post(    LINK.CLIENT.AUTHENTICATION_FORGET_PW                       ,this.verifiedOtp);
+        app.post(    LINK.CLIENT.AUTHENTICATION_UPDATE_PW                       ,this.updatePw);
     },
 
     //LOGIN LOCAL
@@ -200,6 +205,116 @@ module.exports = {
                 return  res.status(200).json({
                             status:200,
                             message:"Register success."
+                        })
+            }); 
+
+        }catch(e){
+            console.log(e);
+            return res.status(500).json({
+                    code:50,
+                    message:"server error."
+                });
+        }
+    },
+
+    getOtp: async function(req,res,next){
+        var value={
+            gmail           :req.query.gmail,         
+        };
+        const sendMail= await email.sendOTP(value.gmail);
+        if(!sendMail){
+            return res.status(500).json({
+                code:50,
+                message:"server send mail error."
+            });
+        }
+
+        return res.status(200).json({
+            code:200,
+            message:"Please check email."
+        });
+    },
+
+    verifiedOtp: async function(req,res,next){
+
+        var value={
+            code            :req.body.code,
+            gmail           :req.body.gmail,         
+        };
+        const sendMail= await email.verifyOTP(value.gmail);
+
+        if(!sendMail){
+            return res.status(500).json({
+                code:50,
+                message:"OTP not verify."
+            });
+        }
+
+        try{
+            value.gmail = value.gmail.trim();
+            //kiem tra username có tồn tại chưa
+            var user=await staffModel.getOne({gmail:value.gmail});
+
+            if(0 == user.length){
+                return res.status(400).json({
+                    code:400,
+                    message:"User not found."
+                });   
+            }
+
+        }catch(e){
+            console.log(e);
+            return res.status(500).json({
+                code:500,
+                message:"Server error."
+            });;
+        }
+
+        user=user[0];
+        return res.status(200).json(tokenUtil.GetAccessTokenAndRefreshTokenOfUser(user));
+    },
+
+    updatePw: async function(req,res,next){
+        var value={
+            gmail           :req.body.gmail, 
+            password        :req.body.password,                 
+        };
+
+        if(!value.gmail || !value.password){
+            return res.status(400).json({
+                code:400,
+                message:"gmail,password ."
+            });
+        }
+        try{
+            crypto.pbkdf2(value.password,process.env.SALT_PASSWORD, 310000,32, 'sha256',async function(err, hashedPassword) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({
+                        code:50,
+                        message:"Server error."
+                    });            
+                    return false;
+                }
+
+                //cover to String hex 
+                hashedPassword=hashedPassword.toString("hex");
+
+                //save password hash
+                value.password = hashedPassword;
+
+                //insert to Db
+                var result=await staffModel.update({email:value.email},{password:value.password});
+
+                if(result.length==0 || result.affectedRows==0){
+                    return res.status(400).json({
+                            code:400,
+                            message:"update pw Fail."
+                        })
+                }
+                return  res.status(200).json({
+                            status:200,
+                            message:"update pw success."
                         })
             }); 
 

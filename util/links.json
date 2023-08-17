@@ -7,8 +7,13 @@
 
         "AUTHENTICATION_REGISTER" : "/authentication/register",
 
+        "AUTHENTICATION_FORGET_PW" : "/authentication/forget/pw",
+
+        "AUTHENTICATION_UPDATE_PW" : "/authentication/update/pw",
+
         "PRODUCT_IMPORT" : "/product/import/:idImport",
 
         "PRODUCT_EXPORT" : "/product/export/:idExport"
+
     }
 }
