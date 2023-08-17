@@ -16,7 +16,6 @@ module.exports={
                     req_url.includes(LINK.CLIENT.AUTHENTICATION_LOGIN) 
                 ||  req_url.includes(LINK.CLIENT.AUTHENTICATION_REGISTER)
                 ||  req_url.includes(LINK.CLIENT.AUTHENTICATION_CREATE_ACCESSTOKEN)
-                ||  req_url.includes(LINK.CLIENT.AUTHENTICATION_CREATE_PASSWORD_HASH) 
         ) ){
             next();
             return ;
@@ -47,7 +46,6 @@ module.exports={
             if(
                 req_url.includes(LINK.CLIENT.AUTHENTICATION_LOGIN)
             ||  req_url.includes(LINK.CLIENT.AUTHENTICATION_CREATE_ACCESSTOKEN)
-            ||  req_url.includes(LINK.CLIENT.AUTHENTICATION_CREATE_PASSWORD_HASH)
             ){
                 next();
             }else{
