@@ -6,6 +6,10 @@ module.exports={
         return db.getOneByCondition(TABLE,condition);
     },
 
+    getVerifyOtp:function(condition){
+        return db.load(`SELECT * FROM ${TABLE} WHERE ? AND ?`,[{email:condition.email},{code:condition.code}])
+    },
+
     add:function(value){
         return db.insert(TABLE,value);
     },

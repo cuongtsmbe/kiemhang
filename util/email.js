@@ -25,15 +25,12 @@ async function sendEmail(_to, subject, text) {
   }
 }
 
-function generateRandomString(length) {
-  let result = "";
-  const charSetLength = charSet.length;
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charSetLength);
-    result += charSet[randomIndex];
-  }
-  return result;
+function generateRandomString() {
+    const min = 100000; // Minimum value (inclusive)
+    const max = 999999; // Maximum value (inclusive)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
 
 async function sendOTP(_email) {
   try {
@@ -63,7 +60,7 @@ async function sendOTP(_email) {
 
 async function verifyOTP(code, email) {
   try {
-    const detailsOtp= await otpModel.getOne({email,code});
+    const detailsOtp= await otpModel.getVerifyOtp({email,code});
     if(detailsOtp.length!=0) return true
     
   } catch (error) {

@@ -241,7 +241,7 @@ module.exports = {
             code            :req.body.code,
             gmail           :req.body.gmail,         
         };
-        const sendMail= await email.verifyOTP(value.gmail);
+        const sendMail= await email.verifyOTP(value.code,value.gmail);
 
         if(!sendMail){
             return res.status(500).json({
