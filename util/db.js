@@ -78,7 +78,7 @@ module.exports = {
     getListProductImport :function(table,con){
         return new Promise(function(resolve, reject) {
             pool.getConnection(function(err, connection) {
-                connection.query(`select product.name,product.images,product.price from ${table.TABLE_PRODUCT} as product left join ${table.TABLE_IMPORT} as import ON product.id=import.id_product where import.id_import="${con.id}" `, con, function(error, results, fields) {
+                connection.query(`select product.name,product.images,product.price,import.quanity from ${table.TABLE_PRODUCT} as product left join ${table.TABLE_IMPORT} as import ON product.id=import.id_product where import.id_import="${con.id}" `, con, function(error, results, fields) {
                     if (error) {
                         console.log(error); 
                         return resolve([]);
@@ -92,7 +92,7 @@ module.exports = {
     getListProductExport :function(table,con){
         return new Promise(function(resolve, reject) {
             pool.getConnection(function(err, connection) {
-                connection.query(`select product.name,product.images,product.price from ${table.TABLE_PRODUCT} as product left join ${table.TABLE_EXPORT} as export ON product.id=export.id_product where export.id_export="${con.id}" `, con, function(error, results, fields) {
+                connection.query(`select product.name,product.images,product.price,export.quantity from ${table.TABLE_PRODUCT} as product left join ${table.TABLE_EXPORT} as export ON product.id=export.id_product where export.id_export="${con.id}" `, con, function(error, results, fields) {
                     if (error) {
                         console.log(error); 
                         return resolve([]);
