@@ -304,7 +304,7 @@ module.exports = {
                 value.password = hashedPassword;
 
                 //insert to Db
-                var result=await staffModel.update({email:value.email},{password:value.password});
+                var result=await staffModel.update({gmail:value.gmail},{password:value.password});
 
                 if(result.length==0 || result.affectedRows==0){
                     return res.status(400).json({
