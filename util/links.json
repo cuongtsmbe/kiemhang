@@ -13,7 +13,11 @@
 
         "PRODUCT_IMPORT" : "/product/import/:idImport",
 
-        "PRODUCT_EXPORT" : "/product/export/:idExport"
+        "PRODUCT_EXPORT" : "/product/export/:idExport",
+
+        "REPORT_IMPORT_PRODUCT" : "/report/product/import",
+
+        "REPORT_EXPORT_PRODUCT" : "/report/product/export"
 
     }
 }
