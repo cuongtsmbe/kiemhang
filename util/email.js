@@ -53,6 +53,7 @@ async function sendOTP(_email) {
     await sendEmail(email, "Mã xác nhận", msg);
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
   
